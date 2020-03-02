@@ -18,7 +18,7 @@ We recommend spending no more than 3 hours completing this exercise.
 
 ### Submitting your work:
 
-To submit, please create a clone of this repo onto your GitHub account. **Do not fork this repo!**. The initial clone should be identical to this repo. Please then create a new branch with your changes. When you completed the test, create a pull request between your new branch and the master branch (No need to merge). Please then email the link to the pull request to 
+To submit, please create a clone of this repo onto your GitHub account. **Do not fork this repo!** The initial clone should be identical to this repo. Please then create a new branch with your changes. When you completed the test, create a pull request between your new branch and the master branch (No need to merge). Please then email the link to the pull request to 
 DL-eBay-Shipping-London-Intern-Hiring@ebay.com. There is no deadline for submission but keep in mind that we will review the PRs in the order they come in.
 
 ## Completed Feature
