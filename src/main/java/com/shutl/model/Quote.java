@@ -14,9 +14,10 @@ public class Quote {
         this.vehicle = vehicle;
     }
 
-    public Quote(String pickupPostcode, String deliveryPostcode, Long price) {
+    public Quote(String pickupPostcode, String deliveryPostcode, Vehicle vehicle, Long price) {
         this.pickupPostcode = pickupPostcode;
         this.deliveryPostcode = deliveryPostcode;
+        this.vehicle = vehicle;
         this.price = price;
     }
 
