@@ -1,6 +1,5 @@
 package com.shutl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +13,11 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
+/*
+These tests are only meant to be run in the context of gradle, they will fail if run alone
+This is because they depend on build actions performed by gradle.
+ */
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
