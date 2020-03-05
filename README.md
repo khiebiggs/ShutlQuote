@@ -22,33 +22,6 @@ DL-eBay-Shipping-London-Intern-Hiring@ebay.com. There is no deadline for submiss
 
 ## Completed Feature
 
-### 1) Simple variable prices by vehicle
-
-Build a basic service that responds to a POST to /quotes, with the following request structure:
-
-```
-{
-  "pickup_postcode":   "SW1A1AA",
-  "delivery_postcode": "EC2A3LT"
-}
-```
-And responds with the following price:
-```
-{
-  "pickup_postcode":   "SW1A1AA",
-  "delivery_postcode": "EC2A3LT",
-  "price":             316
-}
-```
-
-The price we charge depends on the distance between two postcodes. We are not implementing postcode geocoding here, so instead we are using basic formula for working out the price for a quote between two postcodes. The process is to take the base-36 integer of each postcode, subtract the delivery postcode from the pickup postcode and then divide by some large number. If the result is negative, turn it into a positive.
-
-Hint: in java, this would be:
-
-`Long.valueOf("SW1A1AA", 36) - Long.valueOf("EC2A3LT", 36)`
-
-If you have a better idea for a deterministic way of making a number from two postcodes, please feel free to use that instead. Update your service to calculate pricing based upon these rules.
-
 
 ### 1) Api that returns prices based vehicle type and distance between two postcodes
 A basic service that responds to a POST to /quotes
@@ -123,6 +96,8 @@ Run server locally:
 gradle bootRun
 ```
 
+* then visit localhost:8080
+
 Make quote request:
 ```
 echo '{"pickupPostcode": "SW1A1AA", "deliveryPostcode": "EC2A3LT" }' | \
@@ -132,7 +107,7 @@ curl -d @- http://localhost:8080/quote --header "Content-Type:application/json"
 # Thoughts/Assumptions/Shortcomings
 
 * I notice that the exercise specifies that the information should be sent to the API via a post request - I personally believe a GET request would be a better choice as the functionality of the request makes it a safe one.
-* I had to rush a bit due to time constraints at work, so testing isn't as thorough as I would have liked it to be
+* I had to rush a bit due to time constraints at work, so testing isn't as thorough as I would have liked it to be - particularly testing the frontend interactions.
 * There is no input validation on the frontend, and no exception handling on the frontend or the backend. 
     * If I had more time I would have written exception handling code on the API, to ensure meaningful HTTP status codes are returned
     * I would have also written exception handling code for the AJAX portion of the code so that meaninful error messages are returned to the user
