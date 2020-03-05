@@ -1,5 +1,7 @@
 # Take home exercise
 
+### Description
+
 For our tech test, we'd like you to take a stripped-down version of our quoting engine, and then add some features. This is a RESTful service endpoint that takes a few details and works out the price for a delivery.
 
 Throughout the test we're looking for great coding style, driving your code through tests (and refactoring) and at all times doing the bare minimum possible to get the job done. If you don't like the code or tests that are there already, feel free to refactor as you add features.
@@ -12,9 +14,6 @@ Please ensure that you include a readme file with any commands/thoughts/assumpti
 
 Good luck! :)
 
-### Time guideline:
-
-We recommend spending no more than 3 hours completing this exercise.
 
 ### Submitting your work:
 
@@ -23,7 +22,7 @@ DL-eBay-Shipping-London-Intern-Hiring@ebay.com. There is no deadline for submiss
 
 ## Completed Feature
 
-### Basic Service
+### 1) Simple variable prices by vehicle
 
 Build a basic service that responds to a POST to /quotes, with the following request structure:
 
@@ -50,11 +49,11 @@ Hint: in java, this would be:
 
 If you have a better idea for a deterministic way of making a number from two postcodes, please feel free to use that instead. Update your service to calculate pricing based upon these rules.
 
-## Features to complete
 
-### 1) Simple variable prices by vehicle
-
-Our price changes based upon the vehicle. Implement a "vehicle" attribute on the request, that takes one of the following values, applying the appropriate markup:
+### 1) Api that returns prices based vehicle type and distance between two postcodes
+A basic service that responds to a POST to /quotes
+The price we charge depends on the distance between two postcodes. 
+Our price changes based upon the vehicle, by applying the appropriate markup:
 
 * bicycle: 10%
 * motorbike: 15%
@@ -63,42 +62,50 @@ Our price changes based upon the vehicle. Implement a "vehicle" attribute on the
 * large_van: 40%
 
 For example, if the base price was 100, the `small_van` price with markup will be 130.
-The vehicle should also be returned in the response, and the price should be rounded to the nearest integer.
+The vehicle is returned in the response, and the price is rounded to the nearest integer.
 
 Request:
 ```
 {
-  "pickup_postcode":   "SW1A1AA",
-  "delivery_postcode": "EC2A3LT",
+  "pickupPostcode":   "SW1A1AA",
+  "deliveryPostcode": "EC2A3LT",
   "vehicle": "bicycle"
 }
 ```
 Response:
 ```
 {
-  "pickup_postcode":   "SW1A1AA",
-  "delivery_postcode": "EC2A3LT"
+  "pickupPostcode":   "SW1A1AA",
+  "deliveryPostcode": "EC2A3LT"
   "vehicle": "bicycle"
   "price": 348
 }
 ```
 
-### 2) Build an interface for your app!
+### 3) Interface
 
-Build a webpage that makes the above call.
+The frontend is a Single Page [React](https://reactjs.org/) app, using [tailwindcss](https://tailwindcss.com/) as it's CSS framework.
 
-It should contain a form with the following fields:
+It makes the calls outlined above.
+
+It contains a form with the following fields:
 `pickup_postcode`, `delivery_postcode` and `vehicle`.
 
-Under the form, based on the response, list the price in the following format:
+Under the form, based on the response, the price is listed in the following format:
 `A delivery from <pickup_postcode> to <delivery_postcode> using a <vehicle> will cost you £<price>.`
-Substitute the variables in the <> with the appropriate values.
 
 While the page is waiting for the response, an appropriate message should be displayed.
 
-**Bonus**:
-- Make sure that the page displays well both on smaller and larger screens, ie that is `responsive`.
-- The action linked to the submit button could retrieve the data from the service without refreshing the page.
+- The page displays well both on smaller and larger screens, ie that is `responsive`.
+    - Desktop screenshot: 
+    
+    ![Desktop screenshot](desktopScreenshot.png)
+    
+    - Mobile screenshot:
+    
+    ![Mobile screenshot](mobileScreenshot.png)
+                          
+- The page does not need to be reloaded when the form is submitted
 
 # Dependencies
 
@@ -122,13 +129,11 @@ echo '{"pickupPostcode": "SW1A1AA", "deliveryPostcode": "EC2A3LT" }' | \
 curl -d @- http://localhost:8080/quote --header "Content-Type:application/json"
 ```
 
-## Troubleshooting
+# Thoughts/Assumptions/Shortcomings
 
-Some version configurations cause Gradle to not be able to find the main class. to fix this add the follwoing to the end of the build.gradle file
-```
-springBoot {
-    mainClass = "com.shutl.Application"
-}
-```
-
-The build has been tested for Gradle 5.4.1 and Java 8
+* I notice that the exercise specifies that the information should be sent to the API via a post request - I personally believe a GET request would be a better choice as the functionality of the request makes it a safe one.
+* I had to rush a bit due to time constraints at work, so testing isn't as thorough as I would have liked it to be
+* There is no input validation on the frontend, and no exception handling on the frontend or the backend. 
+    * If I had more time I would have written exception handling code on the API, to ensure meaningful HTTP status codes are returned
+    * I would have also written exception handling code for the AJAX portion of the code so that meaninful error messages are returned to the user
+    * I would have used HTML5/REGEX validation for the frontend
