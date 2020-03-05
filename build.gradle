@@ -50,6 +50,13 @@ task appNpmInstall(type: NpmTask) {
     args = ["install"]
 }
 
+task appTailwindBuild(type: NpxTask){
+    description = "Builds the tailwind.css file needed for styling"
+    workingDir = file("${project.projectDir}/src/main/frontend/src")
+    command = "tailwindcss"
+    args = ["build", "App.css", "-o", "tailwind.css"]
+}
+
 task appNpmBuild(type: NpmTask) {
     description = "Builds production version of the webapp"
     workingDir = file("${project.projectDir}/src/main/frontend")
@@ -61,7 +68,8 @@ task copyWebApp(type: Copy) {
     into 'build/resources/main/static/.'
 }
 
-appNpmBuild.dependsOn(appNpmInstall)
+appTailwindBuild.dependsOn(appNpmInstall)
+appNpmBuild.dependsOn(appTailwindBuild)
 copyWebApp.dependsOn(appNpmBuild)
 compileJava.dependsOn(copyWebApp)
 
