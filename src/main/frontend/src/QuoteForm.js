@@ -1,8 +1,60 @@
 import React, {useState} from 'react';
+import axios from 'axios'
 const QuoteForm = () => {
-    const [pickup_postcode, setPickupPostcode] = useState('');
-    const [delivery_postcode, setDeliveryPostcode] = useState('');
-    const [vehicle, setVehicle] = useState('bicycle');
+    const [input_pickup_postcode, setInputPickupPostcode] = useState('');
+    const [input_delivery_postcode, setInputDeliveryPostcode] = useState('');
+    const [input_vehicle, setInputVehicle] = useState('bicycle');
+
+    const [pickup, setPickup] = useState('')
+    const [delivery, setDelivery] = useState('')
+    const [vehicle, setVehicle] = useState('')
+
+    const [loadingStatus, setLoadingStatus] = useState(false);
+    const [price , setPrice] = useState(-1);
+
+    const handleSubmit = (event) => {
+        if(event){
+            event.preventDefault();
+        }
+
+
+        setLoadingStatus(true);
+        resetResults();
+        getPrice();
+    }
+
+    const getPrice = async () => {
+        axios.post('http://localhost:8080/quote', {
+            pickupPostcode: input_pickup_postcode,
+            deliveryPostcode: input_delivery_postcode,
+            vehicle: input_vehicle
+        })
+
+        .then(async (result) => {
+            console.log(result);
+
+            setPrice(result.data.price);
+            setPickup(result.data.pickupPostcode);
+            setDelivery(result.data.deliveryPostcode);
+            resetInputs();
+
+            setLoadingStatus(false);
+        })
+        .catch(e => console.log(e));
+    }
+
+    const resetInputs = () => {
+        setInputPickupPostcode('')
+        setInputDeliveryPostcode('')
+        setInputVehicle('bicycle')
+    }
+
+    const resetResults = () => {
+        setPickup('')
+        setDelivery('')
+        setVehicle('')
+        setPrice(-1)
+    }
 
     return (
         <div >
@@ -10,11 +62,11 @@ const QuoteForm = () => {
                 <h2>
                     Get a Quote Instantly
                 </h2>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <label>Pickup Postcode:
                         <input 
-                            value={pickup_postcode}
-                            onChange={event => setPickupPostcode(event.target.value)}
+                            value={input_pickup_postcode}
+                            onChange={event => setInputPickupPostcode(event.target.value)}
                             id = "pickup_postcode"
                             type = "text"
                             />
@@ -22,8 +74,8 @@ const QuoteForm = () => {
                     <br />
                     <label>Delivery Postcode:
                         <input 
-                            value={delivery_postcode}
-                            onChange={event => setDeliveryPostcode(event.target.value)}
+                            value={input_delivery_postcode}
+                            onChange={event => setInputDeliveryPostcode(event.target.value)}
                             id = "delivery_postcode"
                             type = "text"
                             />
@@ -31,8 +83,8 @@ const QuoteForm = () => {
                     <br />
                     <label>Vehicle:
                         <select id="vehicle"
-                                value={vehicle}
-                                onChange={event => setVehicle(event.target.value)}>
+                                value={input_vehicle}
+                                onChange={event => setInputVehicle(event.target.value)}>
                             <option value="bicycle">Bicyle</option>
                             <option value="motorbike">Motorbike</option>
                             <option value="parcel_car">Parcel Car</option>
@@ -44,12 +96,19 @@ const QuoteForm = () => {
                     <button type="submit">Submit</button>
                 </form>
 
+                
 
-                pickupPostcode: {pickup_postcode}
                 <br />
-                deliveryPostcode: {delivery_postcode}
-                <br />
-                vehicle: {vehicle}
+                
+                {loadingStatus &&
+                    <div> Loading... </div>
+                }
+
+                {price !== -1 &&
+                    <div>
+                        A delivery from {pickup} to {delivery} using a {vehicle} will cost you £{price}.
+                    </div>
+                }
             </div>
         </div>
     );
